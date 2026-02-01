@@ -235,7 +235,10 @@ const DialectMap = {
             });
             
             // 创建标记
-            const marker = L.marker(region.coords, { icon: icon })
+            const marker = L.marker(region.coords, { 
+                icon: icon,
+                zIndexOffset: 100 // 控制标记层级，避免一直显示在最顶层
+            })
                 .addTo(this.map)
                 .bindPopup(`<b>${region.name}</b><br>${region.description.substring(0, 60)}...`);
             
