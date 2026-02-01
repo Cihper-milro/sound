@@ -273,6 +273,33 @@ nav a:hover, nav a.active {
     border-radius: 10px;
     border: 1px solid #ddd;
     margin: 20px 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* Leaflet 控件层级控制 - 设置为999，比导航栏的1000低 */
+.leaflet-control-container {
+    z-index: 999 !important;
+}
+
+.leaflet-control {
+    z-index: 999 !important;
+}
+
+.leaflet-control-zoom {
+    z-index: 999 !important;
+}
+
+.leaflet-control-zoom a {
+    z-index: 999 !important;
+}
+
+.leaflet-top {
+    z-index: 999 !important;
+}
+
+.leaflet-bottom {
+    z-index: 999 !important;
 }
 
 /* 方言地图图例 */
