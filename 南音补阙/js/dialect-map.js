@@ -176,6 +176,11 @@ const DialectMap = {
             // 添加比例尺
             L.control.scale({imperial: false}).addTo(this.map);
             
+            // 延迟设置控件层级，解决缩放按钮显示在最顶层的问题
+            setTimeout(() => {
+                this.fixControlZIndex();
+            }, 100);
+            
             console.log('Leaflet地图初始化成功');
         } catch (error) {
             console.error('地图初始化失败:', error);
@@ -322,6 +327,27 @@ const DialectMap = {
                 }
             });
         });
+    },
+
+    // 修复控件层级问题
+    fixControlZIndex: function() {
+        // 获取地图容器
+        const mapContainer = document.getElementById('map-container');
+        if (!mapContainer) return;
+        
+        // 查找所有Leaflet控件元素并设置适当的z-index
+        const controls = mapContainer.querySelectorAll('.leaflet-control-container .leaflet-control');
+        controls.forEach(control => {
+            control.style.zIndex = '100';
+        });
+        
+        // 特别处理缩放控件
+        const zoomControl = mapContainer.querySelector('.leaflet-control-zoom');
+        if (zoomControl) {
+            zoomControl.style.zIndex = '100';
+        }
+        
+        console.log('地图控件层级修复完成');
     },
 
     // 高亮指定方言区域
