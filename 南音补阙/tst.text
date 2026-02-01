@@ -1,0 +1,16 @@
+dialect-platform/
+│
+├── index.html              # 主HTML文件
+├── css/
+│   ├── style.css          # 主样式文件
+│   └── responsive.css     # 响应式样式
+├── js/
+│   ├── main.js            # 主逻辑文件
+│   ├── dialect-trainer.js # AI方言陪练功能
+│   ├── poetry-reciter.js  # 古诗词吟诵功能
+│   ├── story-house.js     # 亲子故事屋功能
+│   ├── dialect-map.js     # 方言文化地图功能（核心）
+│   └── utils.js           # 工具函数
+└── assets/
+    └── data/
+        └── dialect-data.js # 方言数据
