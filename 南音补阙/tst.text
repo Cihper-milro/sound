@@ -1,6 +1,7 @@
 dialect-platform/
 │
 ├── index.html              # 主HTML文件
+├── audios/
 ├── css/
 │   ├── style.css          # 主样式文件
 │   └── responsive.css     # 响应式样式
