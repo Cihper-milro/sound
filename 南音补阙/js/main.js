@@ -68,6 +68,8 @@ const App = {
         DialectTrainer.init();
         PoetryReciter.init();
         StoryHouse.init();
+        AudioPlayer.init();
+        StoryHouse.init();
         
         console.log('所有模块初始化完成');
     },

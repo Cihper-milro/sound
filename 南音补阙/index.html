@@ -33,6 +33,7 @@
                         <li><a href="#dialect">AI方言陪练</a></li>
                         <li><a href="#poetry">古诗词吟诵</a></li>
                         <li><a href="#story">亲子故事屋</a></li>
+                        <li><a href="#audio">方言示例播放</a></li>
                         <li><a href="#map">方言文化地图</a></li>
                     </ul>
                 </nav>
@@ -105,6 +106,20 @@
                 <div class="feature-content">
                     <p>直观展示中国各地方言分布情况，点击地图区域可了解当地方言特点、文化背景和代表性词汇。</p>
                     <a href="#map" class="btn">查看地图</a>
+                </div>
+            </div>
+            
+            <!-- 方言示例播放 -->
+            <div class="feature-card audio-player">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>方言示例播放</h3>
+                </div>
+                <div class="feature-content">
+                    <p>播放各地方言的音频示例，包括日常对话、特色词汇和语音特点，帮助您直观感受不同方言的发音特色。</p>
+                    <a href="#audio" class="btn">播放示例</a>
                 </div>
             </div>
         </section>
@@ -287,6 +302,49 @@
                 <div id="region-characteristics"></div>
             </div>
         </section>
+
+        <!-- 方言示例播放区域 -->
+        <section id="audio" class="interactive-section">
+            <h2><i class="fas fa-music"></i> 方言示例播放</h2>
+            <p>选择方言类型，播放对应的音频示例，感受不同方言的发音特色</p>
+            
+            <div class="audio-player-container">
+                <div class="audio-controls">
+                    <select class="dialect-select" id="audio-dialect">
+                        <option value="">选择方言类型</option>
+                        <option value="meizhou">梅州话（客家话）</option>
+                        <option value="danjia">疍家话（水上居民）</option>
+                        <option value="leizhou">雷州话（闽语分支）</option>
+                        <option value="shaoguan">韶关话（粤北）</option>
+                    </select>
+                    
+                    <select class="audio-select" id="audio-select" style="display: none;">
+                        <option value="">选择音频文件</option>
+                    </select>
+                    
+                    <button class="btn audio-play-btn" id="play-audio">
+                        <i class="fas fa-play"></i> 播放
+                    </button>
+                    
+                    <button class="btn audio-pause-btn" id="pause-audio" style="display: none;">
+                        <i class="fas fa-pause"></i> 暂停
+                    </button>
+                </div>
+                
+                <div class="audio-player">
+                    <audio id="dialect-audio" controls style="width: 100%; margin-top: 20px;">
+                        <source src="" type="audio/mp4">
+                        您的浏览器不支持音频播放。
+                    </audio>
+                </div>
+                
+                <div class="audio-info" id="audio-info" style="margin-top: 20px; display: none;">
+                    <h4>当前播放：<span id="current-audio-name"></span></h4>
+                    <p id="audio-description"></p>
+                    <div id="audio-playlist" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- 页脚 -->
@@ -304,6 +362,7 @@
                         <li><a href="#dialect">AI方言陪练</a></li>
                         <li><a href="#poetry">古诗词吟诵</a></li>
                         <li><a href="#story">亲子故事屋</a></li>
+                        <li><a href="#audio">方言示例播放</a></li>
                         <li><a href="#map">方言文化地图</a></li>
                     </ul>
                 </div>
@@ -333,6 +392,7 @@
     <script src="js/poetry-reciter.js"></script>
     <script src="js/story-house.js"></script>
     <script src="js/dialect-map.js"></script>
+    <script src="js/audio-player.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

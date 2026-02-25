@@ -212,8 +212,72 @@ const DialectMap = {
         }).addTo(this.map);
     },
 
-    // 添加方言区域标记
+    // 添加方言区域标记（基于音频数据）
     addDialectRegions: function() {
+        const self = this;
+        
+        // 获取音频播放器中的方言数据
+        const audioDialects = AudioPlayer ? AudioPlayer.getDialectData() : null;
+        
+        if (!audioDialects) {
+            console.warn('音频方言数据未找到，使用默认数据');
+            // 使用默认数据作为备用
+            this.addDefaultRegions();
+            return;
+        }
+        
+        let regionId = 1;
+        Object.keys(audioDialects).forEach(dialectKey => {
+            const region = audioDialects[dialectKey];
+            
+            // 创建自定义图标
+            const icon = L.divIcon({
+                className: 'dialect-marker',
+                html: `<div style="
+                    background-color: ${region.color};
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    border: 3px solid white;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 12px;
+                ">${regionId}</div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
+            
+            // 创建标记
+            const marker = L.marker(region.coords, { 
+                icon: icon,
+                zIndexOffset: 100
+            })
+                .addTo(this.map)
+                .bindPopup(`<b>${region.name}</b><br>${region.description.substring(0, 60)}...`);
+            
+            // 添加点击事件
+            marker.on('click', function() {
+                self.showAudioRegionDetails(region, dialectKey);
+            });
+            
+            // 保存标记引用
+            this.markers.push({
+                marker: marker,
+                region: region,
+                dialectKey: dialectKey
+            });
+            
+            regionId++;
+        });
+    },
+    
+    // 添加默认方言区域（备用）
+    addDefaultRegions: function() {
         const self = this;
         
         this.dialectRegions.forEach(region => {
@@ -242,7 +306,7 @@ const DialectMap = {
             // 创建标记
             const marker = L.marker(region.coords, { 
                 icon: icon,
-                zIndexOffset: 100 // 控制标记层级，避免一直显示在最顶层
+                zIndexOffset: 100
             })
                 .addTo(this.map)
                 .bindPopup(`<b>${region.name}</b><br>${region.description.substring(0, 60)}...`);
@@ -298,6 +362,51 @@ const DialectMap = {
         this.map.setView(region.coords, 6);
         
         Utils.showMessage(`已加载${region.name}的详细信息`, 'info');
+    },
+    
+    // 显示音频方言区域详情
+    showAudioRegionDetails: function(region, dialectKey) {
+        this.currentRegion = region;
+        
+        // 更新详情区域
+        const detailsElement = document.getElementById('map-details');
+        const nameElement = document.getElementById('region-name');
+        const infoElement = document.getElementById('region-info');
+        const phrasesElement = document.getElementById('region-phrases');
+        const characteristicsElement = document.getElementById('region-characteristics');
+        
+        if (detailsElement && nameElement && infoElement) {
+            nameElement.textContent = region.name;
+            infoElement.textContent = region.description;
+            
+            // 显示音频文件列表
+            if (region.files && region.files.length > 0) {
+                let audioList = '<h4>音频示例：</h4><ul style="list-style: none; padding: 0;">';
+                region.files.forEach((audioFile, index) => {
+                    audioList += `<li style="margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+                        <strong>${index + 1}. ${audioFile.name}</strong>
+                        <button class="btn" style="margin-left: 10px; padding: 5px 10px;" onclick="AudioPlayer.playAudioFromMap('${dialectKey}', ${index})">
+                            <i class="fas fa-play"></i> 播放
+                        </button>
+                    </li>`;
+                });
+                audioList += '</ul>';
+                
+                if (phrasesElement) {
+                    phrasesElement.innerHTML = audioList;
+                }
+            }
+            
+            // 显示音频数量信息
+            if (characteristicsElement) {
+                characteristicsElement.innerHTML = `<p><strong>音频数量：</strong>${region.files ? region.files.length : 0} 个示例</p>`;
+            }
+            
+            detailsElement.style.display = 'block';
+            Utils.scrollToElement('map-details');
+        }
+        
+        Utils.showMessage(`已加载${region.name}的音频信息`, 'info');
     },
 
     // 绑定事件
