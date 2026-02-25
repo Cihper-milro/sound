@@ -46,40 +46,26 @@ const DialectMap = {
         }
     },
 
-    // 添加方言标记（可自定义扩展）
-    addMarkers: function() {
-        // 方言点数据：名称、坐标、颜色、描述
-        const regions = [
-            {
-                name: '梅州话',
-                coords: [24.3, 116.1],
-                color: '#54a0ff',
-                desc: '客家话代表，保留古汉语入声韵尾。',
-                population: '约5000万人'
-            },
-            {
-                name: '疍家话',
-                coords: [23.1, 113.3],
-                color: '#1dd1a1',
-                desc: '粤语水上居民方言，主要分布在珠江口。',
-                population: '约300万人'
-            },
-            {
-                name: '雷州话',
-                coords: [20.9, 110.1],
-                color: '#feca57',
-                desc: '闽南语分支，流行于雷州半岛。',
-                population: '约600万人'
-            },
-            {
-                name: '韶关话',
-                coords: [24.8, 113.6],
-                color: '#ff9ff3',
-                desc: '粤北土话，混合粤语与客家话特征。',
-                population: '约200万人'
-            }
+    // 添加中国边界（简化版）
+    addChinaBoundary: function() {
+        // 简化的中国边界坐标（实际应用中应使用更精确的GeoJSON数据）
+        const chinaBounds = [
+            [53.5, 73.5],  // 西北
+            [53.5, 135.0], // 东北
+            [18.0, 135.0], // 东南
+            [18.0, 73.5]   // 西南
         ];
+        
+        L.polygon(chinaBounds, {
+            color: '#f8f9fa',
+            fillColor: '#f8f9fa',
+            fillOpacity: 0.1,
+            weight: 1
+        }).addTo(this.map);
+    },
 
+    // 添加方言区域标记
+    addDialectRegions: function() {
         const self = this;
         regions.forEach((region, index) => {
             // 创建自定义图标（带颜色圆点）
@@ -105,7 +91,10 @@ const DialectMap = {
             });
 
             // 创建标记
-            const marker = L.marker(region.coords, { icon })
+            const marker = L.marker(region.coords, { 
+                icon: icon,
+                zIndexOffset: 100 // 控制标记层级，避免一直显示在最顶层
+            })
                 .addTo(this.map)
                 .bindPopup(`<b>${region.name}</b><br>${region.desc}`);
 
@@ -144,9 +133,58 @@ const DialectMap = {
 
         // 可选：移动地图中心到该区域
         this.map.setView(region.coords, 6);
+        
+        Utils.showMessage(`已加载${region.name}的详细信息`, 'info');
+    },
 
-        // 简单的提示（不用Utils，直接用alert或console）
-        console.log(`已显示 ${region.name} 详情`);
+    // 绑定事件
+    bindEvents: function() {
+        const self = this;
+        
+        // 地图点击事件（点击空白处隐藏详情）
+        this.map.on('click', function(e) {
+            // 检查是否点击了标记以外的区域
+            if (!e.originalEvent.target.closest('.dialect-marker')) {
+                document.getElementById('map-details').style.display = 'none';
+            }
+        });
+        
+        // 方言图例点击事件
+        document.querySelectorAll('.map-dialect').forEach((element, index) => {
+            element.addEventListener('click', function() {
+                const dialectColors = [
+                    "#ff6b6b", "#48dbfb", "#1dd1a1", 
+                    "#feca57", "#ff9ff3", "#54a0ff", "#5f27cd"
+                ];
+                
+                const color = dialectColors[index];
+                const region = self.dialectRegions.find(r => r.color === color);
+                if (region) {
+                    self.showRegionDetails(region);
+                }
+            });
+        });
+    },
+
+    // 修复控件层级问题
+    fixControlZIndex: function() {
+        // 获取地图容器
+        const mapContainer = document.getElementById('map-container');
+        if (!mapContainer) return;
+        
+        // 查找所有Leaflet控件元素并设置适当的z-index
+        const controls = mapContainer.querySelectorAll('.leaflet-control-container .leaflet-control');
+        controls.forEach(control => {
+            control.style.zIndex = '100';
+        });
+        
+        // 特别处理缩放控件
+        const zoomControl = mapContainer.querySelector('.leaflet-control-zoom');
+        if (zoomControl) {
+            zoomControl.style.zIndex = '100';
+        }
+        
+        console.log('地图控件层级修复完成');
     },
 
     // 清除所有高亮（如需扩展）

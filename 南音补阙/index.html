@@ -344,6 +344,49 @@
                 </div>
             </div>
         </section>
+
+        <!-- 方言示例播放区域 -->
+        <section id="audio" class="interactive-section">
+            <h2><i class="fas fa-music"></i> 方言示例播放</h2>
+            <p>选择方言类型，播放对应的音频示例，感受不同方言的发音特色</p>
+            
+            <div class="audio-player-container">
+                <div class="audio-controls">
+                    <select class="dialect-select" id="audio-dialect">
+                        <option value="">选择方言类型</option>
+                        <option value="meizhou">梅州话（客家话）</option>
+                        <option value="danjia">疍家话（水上居民）</option>
+                        <option value="leizhou">雷州话（闽语分支）</option>
+                        <option value="shaoguan">韶关话（粤北）</option>
+                    </select>
+                    
+                    <select class="audio-select" id="audio-select" style="display: none;">
+                        <option value="">选择音频文件</option>
+                    </select>
+                    
+                    <button class="btn audio-play-btn" id="play-audio">
+                        <i class="fas fa-play"></i> 播放
+                    </button>
+                    
+                    <button class="btn audio-pause-btn" id="pause-audio" style="display: none;">
+                        <i class="fas fa-pause"></i> 暂停
+                    </button>
+                </div>
+                
+                <div class="audio-player">
+                    <audio id="dialect-audio" controls style="width: 100%; margin-top: 20px;">
+                        <source src="" type="audio/mp4">
+                        您的浏览器不支持音频播放。
+                    </audio>
+                </div>
+                
+                <div class="audio-info" id="audio-info" style="margin-top: 20px; display: none;">
+                    <h4>当前播放：<span id="current-audio-name"></span></h4>
+                    <p id="audio-description"></p>
+                    <div id="audio-playlist" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- 页脚 -->
